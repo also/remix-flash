@@ -13,6 +13,7 @@ package com.ryanberdeen.remix {
   import flash.events.MouseEvent;
   import flash.events.ProgressEvent;
   import flash.events.SecurityErrorEvent;
+  import flash.external.ExternalInterface;
   import flash.net.FileReference;
   import flash.net.LocalConnection;
   import flash.net.URLLoader;
@@ -219,10 +220,6 @@ package com.ryanberdeen.remix {
       }
     }
 
-    public function handleSubscribedMessage(message:String):void {
-      logger.log(message);
-    }
-
     public function handle_started(message:String):void {
       var args:Array = message.split(' ');
 
@@ -241,6 +238,7 @@ package com.ryanberdeen.remix {
       analyzeProgressTween.pause();
       analyzeProgressShape.alpha = 1;
       localConnection.send('com.ryanberdeen.remix.Player', 'loadAnalysis');
+      ExternalInterface.call('handleTrackAnalyzed');
     }
   }
 }
