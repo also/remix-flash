@@ -1,6 +1,5 @@
 package com.ryanberdeen.remix {
   import com.adobe.serialization.json.JSON;
-  import com.ryanberdeen.connector.Connector;
   import com.ryanberdeen.cubes.Cubes;
   import com.ryanberdeen.nest.NestPlayer;
 
@@ -20,7 +19,6 @@ package com.ryanberdeen.remix {
     public static var options:Object;
     private var uploader:Uploader;
     private var loader:URLLoader;
-    internal var connector:Connector;
     internal var trackId:int;
     private var player:NestPlayer;
     private var cubes:Cubes;
@@ -33,29 +31,16 @@ package com.ryanberdeen.remix {
       options.connectorHost ||= 'localhost';
       options.connectorPort ||= 1843;
 
+      trackId = options.trackId;
+
       stage.scaleMode = 'noScale';
       stage.align = 'TL';
 
       opaqueBackground = 0xffffff;
 
-      uploader = new Uploader(this);
-      addChild(uploader);
-
-      connector = new Connector();
-      connector.connect(options.connectorHost, options.connectorPort);
-      connector.subscribe('remix_worker_event', uploader);
-    }
-
-    public function loadSound():void {
-      var sound:Sound = new Sound();
-      sound.addEventListener(ProgressEvent.PROGRESS, function(event:ProgressEvent):void {
-        //
-      });
-
-      sound.load(new URLRequest(options.rootUrl + '/tracks/' + trackId + '/original'));
-
       cubes = new Cubes();
-      player = new NestPlayer(sound, {
+
+      player = new NestPlayer({
         bars: {
           triggerStartHandler: cubes.barTriggerHandler,
           triggerStartOffset: -50
@@ -69,35 +54,70 @@ package com.ryanberdeen.remix {
           triggerStartOffset: -50
         }
       });
+
+      if (trackId) {
+        addChild(cubes);
+        cubes.width = 0;
+        loadSound();
+        loadAnalysis();
+      }
+      else {
+        uploader = new Uploader(this);
+        addChild(uploader);
+      }
+    }
+
+    public function loadSound():void {
+      log('Loading sound');
+      var sound:Sound = new Sound();
+      if (!uploader) {
+        sound.addEventListener(ProgressEvent.PROGRESS, function(event:ProgressEvent):void {
+          cubes.width = stage.stageWidth * (event.bytesLoaded / event.bytesTotal);
+        });
+      }
+      sound.addEventListener(Event.COMPLETE, function(e:Event):void {
+        log('Sound loaded');
+        player.sound = sound;
+        if (player.data) {
+          start();
+        }
+      });
+
+      sound.load(new URLRequest(options.rootUrl + '/tracks/' + trackId + '/original'));
     }
 
     public function loadAnalysis():void {
+      log('Loading analysis');
       loader = new URLLoader();
-      loader.addEventListener(Event.COMPLETE, nestDataCompleteHandler);
+      loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+        log('Analysis loaded');
+        var data:Object = JSON.decode(loader.data);
+        player.data = data;
+        if (player.sound) {
+          start();
+        }
+      });
       var request:URLRequest = new URLRequest(options.rootUrl + '/tracks/' + trackId + '/analysis');
       loader.load(request);
     }
 
-    private function nestDataCompleteHandler(e:Event):void {
-      var data:Object = JSON.decode(loader.data);
-      player.data = data;
+    public function start():void {
+      log('Starting player');
+      if (uploader) {
+        addChild(cubes);
+        removeChild(uploader);
+      }
 
-      addChild(cubes);
-      removeChild(uploader);
       cubes.dropCubes();
-      startTimer = new Timer(2, 1);
+      startTimer = new Timer(3000, 1);
       startTimer.addEventListener('timer', function(e:Event):void {
         player.start();
       });
       startTimer.start();
     }
 
-    public function handleSubscribedMessage(message:String):void {
-      log(message);
-    }
-
     public function log(o:Object):void {
-      //ExternalInterface.call('console.log', o.toString());
+      ExternalInterface.call('console.log', o.toString());
     }
   }
 }

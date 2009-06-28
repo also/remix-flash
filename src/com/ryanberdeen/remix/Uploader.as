@@ -3,6 +3,7 @@ package com.ryanberdeen.remix {
   import com.adobe.serialization.json.JSON;
   import com.elctech.S3UploadOptions;
   import com.elctech.S3UploadRequest;
+  import com.ryanberdeen.connector.Connector;
 
   import flash.display.Shape;
   import flash.display.Sprite;
@@ -22,6 +23,7 @@ package com.ryanberdeen.remix {
 
   public class Uploader extends Sprite {
     private var main:Main;
+    private var connector:Connector;
     private var button:Button;
     private var loader:URLLoader;
     private var trackId:int;
@@ -36,6 +38,11 @@ package com.ryanberdeen.remix {
 
     public function Uploader(main:Main):void {
       this.main = main;
+
+      connector = new Connector();
+      connector.connect(Main.options.connectorHost, Main.options.connectorPort);
+      connector.subscribe('remix_worker_event', this);
+
       button = new Button('Select file…');
       button.addEventListener(MouseEvent.CLICK, browseClickHandler);
       addChild(button);
@@ -92,6 +99,7 @@ package com.ryanberdeen.remix {
     }
 
     private function upload():void {
+      main.log('Creating track');
       var request:URLRequest = new URLRequest(Main.options.rootUrl + '/tracks');
       loader = new URLLoader();
       var variables:URLVariables = new URLVariables();
@@ -107,6 +115,7 @@ package com.ryanberdeen.remix {
     }
 
     private function trackCreatedHandler(e:Event):void {
+      main.log('Track created');
       var data:Object = JSON.decode(loader.data);
       uploadOptions.policy         = data.policy;
       uploadOptions.signature      = data.signature;
@@ -134,11 +143,15 @@ package com.ryanberdeen.remix {
         main.log(event);
       });
       request.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, function(event:Event):void {
-        main.connector.send('remix_worker add_uploaded_track ' + trackId);
+        main.log('Track uploaded');
+        main.loadSound();
+        main.log('Submitting track');
+        connector.send('remix_worker add_uploaded_track ' + trackId);
         main.log(event);
       });
 
       try {
+        main.log('Uploading track');
         request.upload(fileReference);
       }
       catch(e:Error) {
@@ -146,20 +159,25 @@ package com.ryanberdeen.remix {
       }
     }
 
+    public function handleSubscribedMessage(message:String):void {
+      main.log(message);
+    }
+
     public function handle_started(message:String):void {
       var args:Array = message.split(' ');
-      main.loadSound();
 
       submisionProgressTween = TweenMax.to(submissionProgressShape, 1, {alpha: 1, yoyo: 0});
     }
 
     public function handle_track_submitted(message:String):void {
+      main.log('Track submitted');
       submisionProgressTween.pause();
       submissionProgressShape.alpha = 1;
       analyzeProgressTween = TweenMax.to(analyzeProgressShape, 1, {alpha: 1, yoyo: 0});
     }
 
     public function handle_track_analysis_stored(message:String):void {
+      main.log('Track analyzed');
       analyzeProgressTween.pause();
       analyzeProgressShape.alpha = 1;
       main.loadAnalysis();

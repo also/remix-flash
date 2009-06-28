@@ -1,0 +1,9 @@
+[submodule "lib/connector"]
+	path = lib/connector
+	url = git://github.com/also/connector-flash.git
+[submodule "lib/nest"]
+	path = lib/nest
+	url = git://github.com/also/nest.git
+[submodule "lib/cubes"]
+	path = lib/cubes
+	url = git://github.com/also/cubes.git
