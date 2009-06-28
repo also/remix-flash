@@ -1,1 +1,3 @@
-mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/Papervision3D_2 ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -managers flash.fonts.AFEFontManager -o remix.swf -- src/com/ryanberdeen/remix/Main.as
+mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/Papervision3D_2 ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -managers flash.fonts.AFEFontManager -o player.swf -- src/com/ryanberdeen/remix/Player.as
+
+mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -managers flash.fonts.AFEFontManager -o uploader.swf -- src/com/ryanberdeen/remix/Uploader.as

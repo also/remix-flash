@@ -6,18 +6,16 @@ package com.ryanberdeen.remix {
   import flash.display.Sprite;
   import flash.events.Event;
   import flash.events.ProgressEvent;
-  import flash.external.ExternalInterface;
   import flash.media.Sound;
   import flash.net.URLLoader;
   import flash.net.URLRequest;
   import flash.utils.Timer;
 
   [SWF(backgroundColor="#FFFFFF", frameRate="60", width="1024", height="768")]
-  public class Main extends Sprite {
-    [Embed(mimeType="application/x-font", source="/fonts/HelveticaNeueLight.ttf", fontName="HelveticaNeueLight")]
-    private var helveticaNeueUltraLightFontClass:Class;
+  public class Player extends Sprite {
+    private static var logger:Logger = new Logger();
     public static var options:Object;
-    private var uploader:Uploader;
+    private var playerConnection:PlayerConnection;
     private var loader:URLLoader;
     internal var trackId:int;
     private var player:NestPlayer;
@@ -25,11 +23,13 @@ package com.ryanberdeen.remix {
 
     private var startTimer:Timer;
 
-    public function Main():void {
+    public function Player():void {
+      logger.log('Player loaded');
       options = root.loaderInfo.parameters;
       options.rootUrl ||= 'http://localhost:3000';
-      options.connectorHost ||= 'localhost';
-      options.connectorPort ||= 1843;
+
+      playerConnection = new PlayerConnection(this);
+      playerConnection.connect('com.ryanberdeen.remix.Player');
 
       trackId = options.trackId;
 
@@ -39,6 +39,8 @@ package com.ryanberdeen.remix {
       opaqueBackground = 0xffffff;
 
       cubes = new Cubes();
+      addChild(cubes);
+      cubes.width = 0;
 
       player = new NestPlayer({
         bars: {
@@ -56,27 +58,19 @@ package com.ryanberdeen.remix {
       });
 
       if (trackId) {
-        addChild(cubes);
-        cubes.width = 0;
         loadSound();
         loadAnalysis();
-      }
-      else {
-        uploader = new Uploader(this);
-        addChild(uploader);
       }
     }
 
     public function loadSound():void {
-      log('Loading sound');
+      logger.log('Loading sound');
       var sound:Sound = new Sound();
-      if (!uploader) {
-        sound.addEventListener(ProgressEvent.PROGRESS, function(event:ProgressEvent):void {
-          cubes.width = stage.stageWidth * (event.bytesLoaded / event.bytesTotal);
-        });
-      }
+      sound.addEventListener(ProgressEvent.PROGRESS, function(event:ProgressEvent):void {
+        cubes.width = stage.stageWidth * (event.bytesLoaded / event.bytesTotal);
+      });
       sound.addEventListener(Event.COMPLETE, function(e:Event):void {
-        log('Sound loaded');
+        logger.log('Sound loaded');
         player.sound = sound;
         if (player.data) {
           start();
@@ -87,10 +81,10 @@ package com.ryanberdeen.remix {
     }
 
     public function loadAnalysis():void {
-      log('Loading analysis');
+      logger.log('Loading analysis');
       loader = new URLLoader();
       loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-        log('Analysis loaded');
+        logger.log('Analysis loaded');
         var data:Object = JSON.decode(loader.data);
         player.data = data;
         if (player.sound) {
@@ -102,11 +96,7 @@ package com.ryanberdeen.remix {
     }
 
     public function start():void {
-      log('Starting player');
-      if (uploader) {
-        addChild(cubes);
-        removeChild(uploader);
-      }
+      logger.log('Starting player');
 
       cubes.dropCubes();
       startTimer = new Timer(3000, 1);
@@ -114,10 +104,6 @@ package com.ryanberdeen.remix {
         player.start();
       });
       startTimer.start();
-    }
-
-    public function log(o:Object):void {
-      ExternalInterface.call('console.log', o.toString());
     }
   }
 }

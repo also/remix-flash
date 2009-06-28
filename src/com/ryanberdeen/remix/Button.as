@@ -5,7 +5,7 @@ package com.ryanberdeen.remix {
 
   public class Button extends Sprite {
     private var textField:TextField;
-    public function Button(text:String):void {
+    public function Button(text:String, color:uint = 0xaaaaaa, textColor:uint = 0x000000):void {
       buttonMode = true;
       mouseChildren = false;
       tabChildren = false;
@@ -15,6 +15,7 @@ package com.ryanberdeen.remix {
       format.size = 24;
 
       textField = new TextField();
+      textField.textColor = textColor;
       textField.embedFonts = true;
       textField.defaultTextFormat = format;
       textField.text = text;
@@ -22,11 +23,11 @@ package com.ryanberdeen.remix {
       textField.height = textField.textHeight + 5;
 
       var height:Number = textField.textHeight + 10;
-      textField.x = 5 + height / 2;
+      textField.x = 5;
 
       with (graphics) {
-        beginFill(0xaaaaaa);
-        drawRoundRect(0, 0, textField.textWidth + 10 + height, height, height);
+        beginFill(color);
+        drawRect(0, 0, textField.textWidth + 10, height);
         endFill();
       }
       addChild(textField);
