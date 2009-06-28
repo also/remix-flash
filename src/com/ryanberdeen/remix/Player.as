@@ -1,32 +1,31 @@
 package com.ryanberdeen.remix {
   import com.adobe.serialization.json.JSON;
-  import com.ryanberdeen.cubes.Cubes;
   import com.ryanberdeen.nest.NestPlayer;
 
+  import flash.display.Loader;
   import flash.display.Sprite;
   import flash.events.Event;
   import flash.events.ProgressEvent;
   import flash.media.Sound;
   import flash.net.URLLoader;
   import flash.net.URLRequest;
-  import flash.utils.Timer;
 
   [SWF(backgroundColor="#FFFFFF", frameRate="60", width="1024", height="768")]
   public class Player extends Sprite {
     private static var logger:Logger = new Logger();
     public static var options:Object;
     private var playerConnection:PlayerConnection;
-    private var loader:URLLoader;
+    private var analysisLoader:URLLoader;
     internal var trackId:int;
-    private var player:NestPlayer;
-    private var cubes:Cubes;
-
-    private var startTimer:Timer;
+    private var nestPlayer:NestPlayer;
+    private var playerDisplay:PlayerDisplay;
+    private var loader:Loader;
 
     public function Player():void {
       logger.log('Player loaded');
       options = root.loaderInfo.parameters;
       options.rootUrl ||= 'http://localhost:3000';
+      options.display ||= 'cubes';
 
       playerConnection = new PlayerConnection(this);
       playerConnection.connect('com.ryanberdeen.remix.Player');
@@ -38,42 +37,35 @@ package com.ryanberdeen.remix {
 
       opaqueBackground = 0xffffff;
 
-      cubes = new Cubes();
-      addChild(cubes);
-      cubes.width = 0;
+      nestPlayer = new NestPlayer();
 
-      player = new NestPlayer({
-        bars: {
-          triggerStartHandler: cubes.barTriggerHandler,
-          triggerStartOffset: -50
-        },
-        beats: {
-          triggerStartHandler: cubes.beatTriggerHandler,
-          triggerStartOffset: -100
-        },
-        tatums: {
-          triggerStartHandler: cubes.tatumTriggerHandler,
-          triggerStartOffset: -50
+      loader = new Loader();
+      var player:Player = this;
+      loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
+        playerDisplay = PlayerDisplay(loader.content);
+        addChild(Sprite(playerDisplay));
+        playerDisplay.player = player;
+        playerDisplay.nestPlayer = nestPlayer;
+
+        if (trackId) {
+          loadSound();
+          loadAnalysis();
         }
       });
 
-      if (trackId) {
-        loadSound();
-        loadAnalysis();
-      }
+      var request:URLRequest = new URLRequest('/swfs/' + options.display + '.swf');
+      loader.load(request);
     }
 
     public function loadSound():void {
       logger.log('Loading sound');
       var sound:Sound = new Sound();
-      sound.addEventListener(ProgressEvent.PROGRESS, function(event:ProgressEvent):void {
-        cubes.width = stage.stageWidth * (event.bytesLoaded / event.bytesTotal);
-      });
+      sound.addEventListener(ProgressEvent.PROGRESS, playerDisplay.handleSoundLoadProgress);
       sound.addEventListener(Event.COMPLETE, function(e:Event):void {
         logger.log('Sound loaded');
-        player.sound = sound;
-        if (player.data) {
-          start();
+        nestPlayer.sound = sound;
+        if (nestPlayer.data) {
+          prepare();
         }
       });
 
@@ -82,28 +74,27 @@ package com.ryanberdeen.remix {
 
     public function loadAnalysis():void {
       logger.log('Loading analysis');
-      loader = new URLLoader();
-      loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+      analysisLoader = new URLLoader();
+      analysisLoader.addEventListener(Event.COMPLETE, function(e:Event):void {
         logger.log('Analysis loaded');
-        var data:Object = JSON.decode(loader.data);
-        player.data = data;
-        if (player.sound) {
-          start();
+        var data:Object = JSON.decode(analysisLoader.data);
+        nestPlayer.data = data;
+        playerDisplay.data = data;
+        if (nestPlayer.sound) {
+          prepare();
         }
       });
       var request:URLRequest = new URLRequest(options.rootUrl + '/tracks/' + trackId + '/analysis');
-      loader.load(request);
+      analysisLoader.load(request);
+    }
+
+    public function prepare():void {
+      playerDisplay.prepare();
     }
 
     public function start():void {
       logger.log('Starting player');
-
-      cubes.dropCubes();
-      startTimer = new Timer(3000, 1);
-      startTimer.addEventListener('timer', function(e:Event):void {
-        player.start();
-      });
-      startTimer.start();
+      nestPlayer.start();
     }
   }
 }
