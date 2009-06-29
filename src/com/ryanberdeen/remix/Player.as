@@ -25,6 +25,7 @@ package com.ryanberdeen.remix {
       logger.log('Player loaded');
       options = root.loaderInfo.parameters;
       options.rootUrl ||= 'http://localhost:3000';
+      options.rootSwfUrl ||= 'http://localhost:3000/swfs';
       options.display ||= 'cubes';
 
       playerConnection = new PlayerConnection(this);
@@ -53,7 +54,7 @@ package com.ryanberdeen.remix {
         }
       });
 
-      var request:URLRequest = new URLRequest('/swfs/' + options.display + '.swf');
+      var request:URLRequest = new URLRequest(options.rootSwfUrl + '/' + options.display + '.swf');
       loader.load(request);
     }
 
