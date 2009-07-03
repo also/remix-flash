@@ -1,5 +1,5 @@
 package com.ryanberdeen.remix.display {
-  import com.ryanberdeen.nest.NestPlayer;
+  import com.ryanberdeen.nest.INestPlayer;
   import com.ryanberdeen.remix.player.IPlayer;
 
   import flash.events.Event;
@@ -14,6 +14,6 @@ package com.ryanberdeen.remix.display {
 
     function set data(data:Object):void;
 
-    function set nestPlayer(nestPlayer:NestPlayer):void;
+    function set nestPlayer(nestPlayer:INestPlayer):void;
   }
 }

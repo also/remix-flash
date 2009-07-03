@@ -1,6 +1,6 @@
 package com.ryanberdeen.remix.display {
   import com.ryanberdeen.cubes.Cubes;
-  import com.ryanberdeen.nest.NestPlayer;
+  import com.ryanberdeen.nest.INestPlayer;
   import com.ryanberdeen.remix.Logger;
   import com.ryanberdeen.remix.player.IPlayer;
 
@@ -22,7 +22,7 @@ package com.ryanberdeen.remix.display {
       width = 0;
     }
 
-    public function set nestPlayer(nestPlayer:NestPlayer):void {
+    public function set nestPlayer(nestPlayer:INestPlayer):void {
       nestPlayer.options = {
         bars: {
           triggerStartHandler: cubes.barTriggerHandler,

@@ -1,5 +1,5 @@
 package com.ryanberdeen.remix.display {
-  import com.ryanberdeen.nest.NestPlayer;
+  import com.ryanberdeen.nest.INestPlayer;
   import com.ryanberdeen.nest.NestVis;
   import com.ryanberdeen.remix.player.IPlayer;
 
@@ -10,13 +10,13 @@ package com.ryanberdeen.remix.display {
   public class TimelineDisplay extends Sprite implements IPlayerDisplay {
     private var nestVis:NestVis;
     private var _player:IPlayer;
-    private var _nestPlayer:NestPlayer;
+    private var _nestPlayer:INestPlayer;
 
     public function set player(player:IPlayer):void {
       _player = player;
     }
 
-    public function set nestPlayer(nestPlayer:NestPlayer):void {
+    public function set nestPlayer(nestPlayer:INestPlayer):void {
       _nestPlayer = nestPlayer;
     }
 
