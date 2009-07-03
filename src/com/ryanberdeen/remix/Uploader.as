@@ -127,6 +127,7 @@ package com.ryanberdeen.remix {
       numberFormat.font = 'HelveticaNeue';
       numberFormat.size = 24;
       var numberTextField:TextField = new TextField();
+      numberTextField.antiAliasType = 'advanced';
       numberTextField.embedFonts = true;
       numberTextField.defaultTextFormat = numberFormat;
       numberTextField.text = number.toString();
@@ -136,6 +137,7 @@ package com.ryanberdeen.remix {
       descriptionFormat.font = 'HelveticaNeueLight';
       descriptionFormat.size = 18;
       var descriptionTextField:TextField = new TextField();
+      descriptionTextField.antiAliasType = 'advanced';
       descriptionTextField.embedFonts = true;
       descriptionTextField.defaultTextFormat = descriptionFormat;
       descriptionTextField.text = description;

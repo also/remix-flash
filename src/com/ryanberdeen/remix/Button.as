@@ -15,6 +15,7 @@ package com.ryanberdeen.remix {
       format.size = 24;
 
       textField = new TextField();
+      textField.antiAliasType = 'advanced';
       textField.textColor = textColor;
       textField.embedFonts = true;
       textField.defaultTextFormat = format;
