@@ -1,12 +1,13 @@
-package com.ryanberdeen.remix {
+package com.ryanberdeen.remix.display {
   import com.ryanberdeen.nest.NestPlayer;
   import com.ryanberdeen.nest.NestVis;
+  import com.ryanberdeen.remix.player.Player;
 
   import flash.display.Sprite;
   import flash.events.Event;
   import flash.events.ProgressEvent;
 
-  public class TimelineDisplay extends Sprite implements PlayerDisplay {
+  public class TimelineDisplay extends Sprite implements IPlayerDisplay {
     private var nestVis:NestVis;
     private var _player:Player;
     private var _nestPlayer:NestPlayer;

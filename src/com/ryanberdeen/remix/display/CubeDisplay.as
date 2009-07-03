@@ -1,13 +1,15 @@
-package com.ryanberdeen.remix {
+package com.ryanberdeen.remix.display {
   import com.ryanberdeen.cubes.Cubes;
   import com.ryanberdeen.nest.NestPlayer;
+  import com.ryanberdeen.remix.Logger;
+  import com.ryanberdeen.remix.player.Player;
 
   import flash.display.Sprite;
   import flash.events.Event;
   import flash.events.ProgressEvent;
   import flash.utils.Timer;
 
-  public class CubeDisplay extends Sprite implements PlayerDisplay {
+  public class CubeDisplay extends Sprite implements IPlayerDisplay {
     private var _player:Player;
     private var cubes:Cubes;
 

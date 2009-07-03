@@ -1,9 +1,11 @@
-package com.ryanberdeen.remix {
+package com.ryanberdeen.remix.uploader {
   import com.adobe.net.MimeTypeMap;
   import com.adobe.serialization.json.JSON;
   import com.elctech.S3UploadOptions;
   import com.elctech.S3UploadRequest;
   import com.ryanberdeen.connector.Connector;
+  import com.ryanberdeen.remix.Button;
+  import com.ryanberdeen.remix.Logger;
 
   import flash.display.Shape;
   import flash.display.Sprite;

@@ -1,7 +1,7 @@
 mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -o player.swf -- src/com/ryanberdeen/remix/Player.as
 
-mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -managers flash.fonts.AFEFontManager -o uploader.swf -- src/com/ryanberdeen/remix/Uploader.as
+mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -managers flash.fonts.AFEFontManager -o uploader.swf -- src/com/ryanberdeen/remix/uploader/Uploader.as
 
-mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/Papervision3D_2 ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -o cubes.swf -- src/com/ryanberdeen/remix/CubeDisplay.as
+mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/Papervision3D_2 ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -o cubes.swf -- src/com/ryanberdeen/remix/display/CubeDisplay.as
 
-mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -o timeline.swf -- src/com/ryanberdeen/remix/TimelineDisplay.as
+mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -o timeline.swf -- src/com/ryanberdeen/remix/display/TimelineDisplay.as

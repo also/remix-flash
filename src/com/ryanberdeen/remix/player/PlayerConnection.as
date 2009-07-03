@@ -1,4 +1,4 @@
-package com.ryanberdeen.remix {
+package com.ryanberdeen.remix.player {
   import flash.net.LocalConnection;
 
   internal class PlayerConnection extends LocalConnection {

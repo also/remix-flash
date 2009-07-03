@@ -1,11 +1,14 @@
-package com.ryanberdeen.remix {
+package com.ryanberdeen.remix.player {
   import com.adobe.serialization.json.JSON;
   import com.ryanberdeen.nest.NestPlayer;
+  import com.ryanberdeen.remix.Logger;
+  import com.ryanberdeen.remix.display.IPlayerDisplay;
 
   import flash.display.Loader;
   import flash.display.Sprite;
   import flash.events.Event;
   import flash.events.ProgressEvent;
+  import flash.external.ExternalInterface;
   import flash.media.Sound;
   import flash.net.URLLoader;
   import flash.net.URLRequest;
@@ -18,7 +21,7 @@ package com.ryanberdeen.remix {
     private var analysisLoader:URLLoader;
     internal var trackId:int;
     private var nestPlayer:NestPlayer;
-    private var playerDisplay:PlayerDisplay;
+    private var playerDisplay:IPlayerDisplay;
     private var loader:Loader;
 
     public function Player():void {
@@ -43,7 +46,7 @@ package com.ryanberdeen.remix {
       loader = new Loader();
       var player:Player = this;
       loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
-        playerDisplay = PlayerDisplay(loader.content);
+        playerDisplay = IPlayerDisplay(loader.content);
         addChild(Sprite(playerDisplay));
         playerDisplay.player = player;
         playerDisplay.nestPlayer = nestPlayer;
@@ -81,6 +84,8 @@ package com.ryanberdeen.remix {
         var data:Object = JSON.decode(analysisLoader.data);
         nestPlayer.data = data;
         playerDisplay.data = data;
+        logger.log("Sending metadata to javascript");
+        ExternalInterface.call('setMetadata', data.metadata);
         if (nestPlayer.sound) {
           prepare();
         }

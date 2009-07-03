@@ -1,10 +1,11 @@
-package com.ryanberdeen.remix {
+package com.ryanberdeen.remix.display {
   import com.ryanberdeen.nest.NestPlayer;
+  import com.ryanberdeen.remix.player.Player;
 
   import flash.events.Event;
   import flash.events.ProgressEvent;
 
-  public interface PlayerDisplay {
+  public interface IPlayerDisplay {
     function handleSoundLoadProgress(e:ProgressEvent):void;
 
     function prepare():void;
