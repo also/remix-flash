@@ -1,6 +1,6 @@
 package com.ryanberdeen.remix.display {
   import com.ryanberdeen.nest.NestPlayer;
-  import com.ryanberdeen.remix.player.Player;
+  import com.ryanberdeen.remix.player.IPlayer;
 
   import flash.events.Event;
   import flash.events.ProgressEvent;
@@ -10,7 +10,7 @@ package com.ryanberdeen.remix.display {
 
     function prepare():void;
 
-    function set player(player:Player):void;
+    function set player(player:IPlayer):void;
 
     function set data(data:Object):void;
 

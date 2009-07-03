@@ -14,7 +14,7 @@ package com.ryanberdeen.remix.player {
   import flash.net.URLRequest;
 
   [SWF(backgroundColor="#FFFFFF", frameRate="60", width="1024", height="768")]
-  public class Player extends Sprite {
+  public class Player extends Sprite implements IPlayer {
     private static var logger:Logger = new Logger();
     public static var options:Object;
     private var playerConnection:PlayerConnection;

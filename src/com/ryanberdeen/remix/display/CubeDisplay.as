@@ -2,7 +2,7 @@ package com.ryanberdeen.remix.display {
   import com.ryanberdeen.cubes.Cubes;
   import com.ryanberdeen.nest.NestPlayer;
   import com.ryanberdeen.remix.Logger;
-  import com.ryanberdeen.remix.player.Player;
+  import com.ryanberdeen.remix.player.IPlayer;
 
   import flash.display.Sprite;
   import flash.events.Event;
@@ -10,12 +10,12 @@ package com.ryanberdeen.remix.display {
   import flash.utils.Timer;
 
   public class CubeDisplay extends Sprite implements IPlayerDisplay {
-    private var _player:Player;
+    private var _player:IPlayer;
     private var cubes:Cubes;
 
     private var startTimer:Timer;
 
-    public function set player(player:Player):void {
+    public function set player(player:IPlayer):void {
       _player = player;
       cubes = new Cubes();
       addChild(cubes);
@@ -42,7 +42,8 @@ package com.ryanberdeen.remix.display {
     public function set data(data:Object):void {}
 
     public function handleSoundLoadProgress(e:ProgressEvent):void {
-      width = _player.stage.stageWidth * (e.bytesLoaded / e.bytesTotal);
+      // TODO should not be based on stage
+      width = stage.stageWidth * (e.bytesLoaded / e.bytesTotal);
     }
 
     public function prepare():void {

@@ -1,7 +1,7 @@
 package com.ryanberdeen.remix.display {
   import com.ryanberdeen.nest.NestPlayer;
   import com.ryanberdeen.nest.NestVis;
-  import com.ryanberdeen.remix.player.Player;
+  import com.ryanberdeen.remix.player.IPlayer;
 
   import flash.display.Sprite;
   import flash.events.Event;
@@ -9,10 +9,10 @@ package com.ryanberdeen.remix.display {
 
   public class TimelineDisplay extends Sprite implements IPlayerDisplay {
     private var nestVis:NestVis;
-    private var _player:Player;
+    private var _player:IPlayer;
     private var _nestPlayer:NestPlayer;
 
-    public function set player(player:Player):void {
+    public function set player(player:IPlayer):void {
       _player = player;
     }
 
@@ -21,7 +21,8 @@ package com.ryanberdeen.remix.display {
     }
 
     public function set data(data:Object):void {
-      nestVis = new NestVis(data, _player.stage.stageWidth);
+      // TODO should not depend on stage
+      nestVis = new NestVis(data, stage.stageWidth);
       addChild(nestVis);
       _nestPlayer.positionListener = nestVis;
     }
