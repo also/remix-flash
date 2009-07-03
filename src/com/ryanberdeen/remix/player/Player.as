@@ -84,8 +84,8 @@ package com.ryanberdeen.remix.player {
         var data:Object = JSON.decode(analysisLoader.data);
         nestPlayer.data = data;
         playerDisplay.data = data;
-        logger.log("Sending metadata to javascript");
-        ExternalInterface.call('setMetadata', data.metadata);
+        logger.log("Sending analysis to javascript");
+        ExternalInterface.call('setAnalysis', data);
         if (nestPlayer.sound) {
           prepare();
         }
