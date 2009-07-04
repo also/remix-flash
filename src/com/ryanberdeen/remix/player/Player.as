@@ -47,9 +47,14 @@ package com.ryanberdeen.remix.player {
 
       nestPlayer = new NestPlayer();
 
+      loadDisplay();
+    }
+
+    private function loadDisplay():void {
       loader = new Loader();
       var player:Player = this;
       loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(e:Event):void {
+        logger.log('Display loaded');
         playerDisplay = IPlayerDisplay(loader.content);
         addChild(Sprite(playerDisplay));
         playerDisplay.player = player;
@@ -61,6 +66,7 @@ package com.ryanberdeen.remix.player {
         }
       });
 
+      logger.log('Loading display');
       var request:URLRequest = new URLRequest(options.rootSwfUrl + '/' + options.display + '.swf');
       loader.load(request);
     }
@@ -71,11 +77,10 @@ package com.ryanberdeen.remix.player {
       }
 
       logger.log('Loading sound');
-      var sound:Sound = new Sound();
+      sound = new Sound();
       sound.addEventListener(ProgressEvent.PROGRESS, playerDisplay.handleSoundLoadProgress);
       sound.addEventListener(Event.COMPLETE, function(e:Event):void {
         logger.log('Sound loaded');
-        sound = sound;
         nestPlayer.positionSource = new SoundPositionSource(sound);
         if (nestPlayer.data) {
           prepare();
@@ -94,14 +99,13 @@ package com.ryanberdeen.remix.player {
         nestPlayer.data = data;
         playerDisplay.data = data;
 
-        logger.log("Sending analysis to javascript");
         ExternalInterface.call('setAnalysis', data);
 
         if (!options.playSound) {
           nestPlayer.positionSource = new TimePositionSource(data.duration * 1000);
           prepare();
         }
-        else if (sound) {
+        else if (sound && sound.bytesLoaded == sound.bytesTotal) {
           prepare();
         }
       });
