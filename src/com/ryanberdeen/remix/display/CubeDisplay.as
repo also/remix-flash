@@ -47,6 +47,7 @@ package com.ryanberdeen.remix.display {
     }
 
     public function prepare():void {
+      width = stage.stageWidth;
       cubes.dropCubes();
       startTimer = new Timer(3000, 1);
       startTimer.addEventListener('timer', function(e:Event):void {
