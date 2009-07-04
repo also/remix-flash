@@ -1,6 +1,7 @@
 package com.ryanberdeen.remix.player {
   import com.adobe.serialization.json.JSON;
   import com.ryanberdeen.nest.NestPlayer;
+  import com.ryanberdeen.nest.SoundPositionSource;
   import com.ryanberdeen.remix.Logger;
   import com.ryanberdeen.remix.display.IPlayerDisplay;
 
@@ -23,6 +24,7 @@ package com.ryanberdeen.remix.player {
     private var nestPlayer:NestPlayer;
     private var playerDisplay:IPlayerDisplay;
     private var loader:Loader;
+    private var sound:Sound;
 
     public function Player():void {
       logger.log('Player loaded');
@@ -67,7 +69,8 @@ package com.ryanberdeen.remix.player {
       sound.addEventListener(ProgressEvent.PROGRESS, playerDisplay.handleSoundLoadProgress);
       sound.addEventListener(Event.COMPLETE, function(e:Event):void {
         logger.log('Sound loaded');
-        nestPlayer.sound = sound;
+        sound = sound;
+        nestPlayer.positionSource = new SoundPositionSource(sound);
         if (nestPlayer.data) {
           prepare();
         }
@@ -84,9 +87,11 @@ package com.ryanberdeen.remix.player {
         var data:Object = JSON.decode(analysisLoader.data);
         nestPlayer.data = data;
         playerDisplay.data = data;
+
         logger.log("Sending analysis to javascript");
         ExternalInterface.call('setAnalysis', data);
-        if (nestPlayer.sound) {
+
+        if (sound) {
           prepare();
         }
       });

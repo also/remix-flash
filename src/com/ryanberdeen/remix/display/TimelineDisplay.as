@@ -22,9 +22,8 @@ package com.ryanberdeen.remix.display {
 
     public function set data(data:Object):void {
       // TODO should not depend on stage
-      nestVis = new NestVis(data, stage.stageWidth);
+      nestVis = new NestVis(_nestPlayer, stage.stageWidth);
       addChild(nestVis);
-      _nestPlayer.positionListener = nestVis;
     }
 
     public function handleSoundLoadProgress(e:ProgressEvent):void {}
