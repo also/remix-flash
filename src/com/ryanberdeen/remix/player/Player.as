@@ -2,6 +2,7 @@ package com.ryanberdeen.remix.player {
   import com.adobe.serialization.json.JSON;
   import com.ryanberdeen.nest.NestPlayer;
   import com.ryanberdeen.nest.SoundPositionSource;
+  import com.ryanberdeen.nest.TimePositionSource;
   import com.ryanberdeen.remix.Logger;
   import com.ryanberdeen.remix.display.IPlayerDisplay;
 
@@ -32,6 +33,7 @@ package com.ryanberdeen.remix.player {
       options.rootUrl ||= 'http://localhost:3000';
       options.rootSwfUrl ||= 'http://localhost:3000/swfs';
       options.display ||= 'cubes';
+      options.playSound = options.playSound != 'false' ? true : false;
 
       playerConnection = new PlayerConnection(this);
       playerConnection.connect('com.ryanberdeen.remix.Player');
@@ -64,6 +66,10 @@ package com.ryanberdeen.remix.player {
     }
 
     public function loadSound():void {
+      if (!options.playSound) {
+        return;
+      }
+
       logger.log('Loading sound');
       var sound:Sound = new Sound();
       sound.addEventListener(ProgressEvent.PROGRESS, playerDisplay.handleSoundLoadProgress);
@@ -91,7 +97,11 @@ package com.ryanberdeen.remix.player {
         logger.log("Sending analysis to javascript");
         ExternalInterface.call('setAnalysis', data);
 
-        if (sound) {
+        if (!options.playSound) {
+          nestPlayer.positionSource = new TimePositionSource(data.duration * 1000);
+          prepare();
+        }
+        else if (sound) {
           prepare();
         }
       });
