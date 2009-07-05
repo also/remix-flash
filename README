@@ -1,5 +1,7 @@
 mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -o player.swf -- src/com/ryanberdeen/remix/player/Player.as
 
+mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src -o api.swf -- src/com/ryanberdeen/remix/api/Api.as
+
 mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/as3corelib-.92.1/src ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -managers flash.fonts.AFEFontManager -o uploader.swf -- src/com/ryanberdeen/remix/uploader/Uploader.as
 
 mxmlc -compiler.source-path src/ ~/Documents/Resources/ActionScript\ 3\ Classes/Papervision3D_2 ~/Documents/Resources/ActionScript\ 3\ Classes/greensock-tweening-platform-as3 lib/* -o cubes.swf -- src/com/ryanberdeen/remix/display/CubeDisplay.as
