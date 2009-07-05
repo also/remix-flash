@@ -1,7 +1,9 @@
 package com.ryanberdeen.remix.api {
   import com.adobe.serialization.json.JSON;
   import com.ryanberdeen.remix.Logger;
+  import com.ryanberdeen.remix.player.DiscontinuousSampleSource;
   import com.ryanberdeen.remix.player.RemixPlayer;
+  import com.ryanberdeen.remix.player.SoundSampleSource;
 
   import flash.display.Loader;
   import flash.display.Sprite;
@@ -69,9 +71,12 @@ package com.ryanberdeen.remix.api {
         return;
       }
 
-      remixPlayer = new RemixPlayer(sound);
+      remixPlayer = new RemixPlayer();
+      var sampleSource:DiscontinuousSampleSource = new DiscontinuousSampleSource();
+      sampleSource.sampleSource = new SoundSampleSource(sound);
+      sampleSource.sampleRanges = sampleRanges;
 
-      remixPlayer.sampleRanges = sampleRanges;
+      remixPlayer.sampleSource = sampleSource;
       remixPlayer.start();
     }
   }
