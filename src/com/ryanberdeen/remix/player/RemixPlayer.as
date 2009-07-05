@@ -19,9 +19,7 @@ package com.ryanberdeen.remix.player {
       outputSound = new Sound();
 
       outputSound.addEventListener(SampleDataEvent.SAMPLE_DATA, function(e:SampleDataEvent):void {
-        var bytes:ByteArray = new ByteArray();
-        _sampleSource.extract(bytes, SAMPLE_BUFFER_SIZE);
-        e.data.writeBytes(bytes);
+        _sampleSource.extract(e.data, SAMPLE_BUFFER_SIZE);
       });
     }
 
