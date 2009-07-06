@@ -49,7 +49,7 @@ package com.ryanberdeen.remix.player {
     }
 
     private function soundCompleteHandler(e:Event):void {
-      dispatchEvent(new Event(Event.COMPLETE));
+      dispatchEvent(new Event(Event.SOUND_COMPLETE));
     }
   }
 }
